@@ -10,11 +10,14 @@ def solution(p: float, x: np.array) -> tuple:
     # Измените код этой функции
     # Это будет вашим решением
     # Не меняйте название функции и её аргументы
-    n = len(x)
     alpha = 1 - p
-    q1 = chi2.ppf(1 - alpha / 2, 2*n)
-    q2 = chi2.ppf(alpha / 2, 2*n)
-    sigma_hat = np.sqrt(np.mean(x**2) / 2)
-    b1 = np.sqrt(n/2) * sigma_hat / np.sqrt(q1)
-    b2 = np.sqrt(n/2) * sigma_hat / np.sqrt(q2)
-    return b1, b2
+    n = len(x)
+    mu = x.mean()
+    sigma = x.std(ddof=1)
+    z = norm.ppf(1 - alpha / 2)
+    h = z * sigma / np.sqrt(n)
+    left = mu - h
+    right = mu + h
+    freq_not_in_interval = sum((x < left) | (x > right)) / n
+    avg_interval_length = h * 2
+    return left, right, freq_not_in_interval, avg_interval_length
