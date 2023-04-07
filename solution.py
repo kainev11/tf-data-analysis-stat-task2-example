@@ -10,13 +10,11 @@ def solution(p: float, x: np.array) -> tuple:
     # Измените код этой функции
     # Это будет вашим решением
     # Не меняйте название функции и её аргументы
-    x_mean = np.mean(x)
-    x_var = np.var(x, ddof=1)
-    
-    mse = np.sqrt(x_var)
-    
     alpha = 1 - p
-    left = np.sqrt(x_var / np.percentile(norm.cdf(alpha / 2), 1)) - x_mean
-    right = np.sqrt(x_var / np.percentile(norm.cdf(1 - alpha / 2), 1)) - x_mean
-    
-    return left, right
+    n = len(x)
+    mean = np.mean(x)
+    std = np.std(x, ddof=1)
+    t_val = t.ppf(1 - alpha / 2, n - 1) 
+    left = mean - t_val * std / np.sqrt(n)
+    right = mean + t_val * std / np.sqrt(n)
+    return (left, right)
