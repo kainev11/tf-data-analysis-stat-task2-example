@@ -11,13 +11,9 @@ def solution(p: float, x: np.array) -> tuple:
     # Это будет вашим решением
     # Не меняйте название функции и её аргументы
     alpha = 1 - p
-    n = len(x)
-    mu = x.mean()
-    sigma = x.std(ddof=1)
-    z = norm.ppf(1 - alpha / 2)
-    h = z * sigma / np.sqrt(n)
-    left = mu - h
-    right = mu + h
-    freq_not_in_interval = sum((x < left) | (x > right)) / n
-    avg_interval_length = h * 2
-    return left, right, freq_not_in_interval, avg_interval_length
+    loc = x.mean()
+    scale = np.sqrt(np.var(x)) / np.sqrt(len(x))
+    chi_sq = norm.ppf(1 - alpha / 2)**2
+    left = np.sqrt((len(x) - 1) * np.var(x)) / np.sqrt(chi_sq)
+    right = np.sqrt((len(x) - 1) * np.var(x)) / np.sqrt(chi_sq)
+    return loc - right, loc + left
