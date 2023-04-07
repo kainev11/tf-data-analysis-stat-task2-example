@@ -10,11 +10,11 @@ def solution(p: float, x: np.array) -> tuple:
     # Измените код этой функции
     # Это будет вашим решением
     # Не меняйте название функции и её аргументы
-    alpha = 1 - p
     n = len(x)
-    mean = np.mean(x)
-    var = np.var(x, ddof=1)
-    std_err = np.sqrt(var / n)
-    z = norm.ppf(1 - alpha / 2)
-    ci = norm.interval(alpha, loc=mean, scale=std_err)
-    return ci
+    alpha = 1 - p
+    q1 = chi2.ppf(1 - alpha / 2, 2*n)
+    q2 = chi2.ppf(alpha / 2, 2*n)
+    sigma_hat = np.sqrt(np.mean(x**2) / 2)
+    b1 = np.sqrt(n/2) * sigma_hat / np.sqrt(q1)
+    b2 = np.sqrt(n/2) * sigma_hat / np.sqrt(q2)
+    return b1, b2
